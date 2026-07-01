@@ -1,0 +1,212 @@
+{
+  "name": "Automated Contact Form Processing",
+  "nodes": [
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "muAOMDmoEVPEIvln",
+          "mode": "list",
+          "cachedResultName": "contact_form_submission",
+          "cachedResultUrl": "/projects/5OsdiUnpaGRvSOUF/datatables/muAOMDmoEVPEIvln"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.body.name }}",
+            "email": "={{ $json.body.email }}",
+            "subject": "={{ $json.body.subject }}",
+            "message": "={{ $json.body.message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "subject",
+              "displayName": "subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": false
+        }
+      },
+      "id": "3d033377-9138-45b3-abe4-f09bf6c0a993",
+      "name": "Store Submission",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "95c3c80e-ced1-48b4-a585-fe42a1722777",
+              "name": "body.name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "91184614-c61b-41ef-b2d2-17351812bdd2",
+              "name": "body.email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "d3819c0a-4993-493c-aa4c-64c0c89e728f",
+              "name": "body.subject",
+              "value": "={{ $json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "f7d377fd-5d35-407e-8195-460e42ccaf15",
+              "name": "body.message",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        304
+      ],
+      "id": "81039d3a-3555-4ff3-8a1b-5dfc31588145",
+      "name": "Email Format"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.email }}",
+        "subject": "={{ $json.body.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        304
+      ],
+      "id": "157cecfb-81c3-4fa9-bdaf-7903ddfb2391",
+      "name": "Send a message",
+      "webhookId": "9b7852b9-0d69-409f-8cfa-286dce4c59e7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "sSRmPyHsuB6ARR40",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b33b6838-fb2f-4e72-baa5-a6d402c97f57",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        304
+      ],
+      "id": "60fea26f-e40d-4200-aee4-81344d6f0f60",
+      "name": "Webhook",
+      "webhookId": "b33b6838-fb2f-4e72-baa5-a6d402c97f57"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Store Submission": {
+      "main": [
+        [
+          {
+            "node": "Email Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Format": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Store Submission",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "356dc4e2-0b8f-44fc-b455-18ec18adc3d8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3770b9c7256dc4a6f449e20fd703ed0454b4cb282e9d85142b84b7c4ae00bd0a"
+  },
+  "nodeGroups": [],
+  "id": "iwkaO0x9mTiBUf5G",
+  "tags": []
+}
